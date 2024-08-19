@@ -219,9 +219,11 @@ def set_backend():
 
 
 @timed_op
-def broadcast(tensor, src, group=None, async_op=False, prof=False, log_name='broadcast', debug=get_caller_func()):
+def broadcast(tensor, src, group=None, async_op=False, prof=False, log_name='broadcast', debug=get_caller_func()):                         
     global cdb
-    return cdb.broadcast(tensor=tensor, src=src, group=group, async_op=async_op)
+    if not tensor.is_contiguous():
+        tensor = tensor.contiguous()
+    return cdb.broadcast(tensor=tensor, src=src, group=group, async_op=async_op) 
 
 
 @timed_op
